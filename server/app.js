@@ -1,9 +1,12 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
+// Express instances creation
 const app = express()
 app.use(express.json())
 
+// Schema + Model
 // Step1: creating an constructor function like function
 const userSchema = new mongoose.Schema({
   email: {
@@ -13,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
 
   password: {
-    type: mongoose.Schema.Types.Mixed,
+    type: String,
     required: [true, 'please Enter password'],
   },
 })
@@ -25,6 +28,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+// Register logic
 app.post('/register', async (req, res) => {
   // Get data from server using req.body
   console.log(req.body)
@@ -32,35 +36,36 @@ app.post('/register', async (req, res) => {
 
   // Do some basic validation
   if (!email || !plainTextPassword) {
-    return res.status(404).json({
+    return res.status(400).json({
       status: 'Failed',
       message: 'Data not correct',
     })
   }
-  
+
   // duplicate user check
-  const existingUser = await User.findOne({ email:email });
-  if(existingUser) return res.status(400).json({
-    status:"fail",
-    message:"user Already Exist"
-  })
+  const existingUser = await User.findOne({ email: email })
+  if (existingUser)
+    return res.status(409).json({
+      status: 'fail',
+      message: 'user Already Exist',
+    })
 
   // hash it before saving to database
   const hashPassword = await bcrypt.hash(plainTextPassword, 10)
-  console.log(hashPassword);
+  console.log(hashPassword)
 
   try {
     let response = await User.create({
       email: email,
       password: hashPassword,
     })
-    console.log(response);
+    console.log(response)
     return res.status(201).json({
-      status: "success",
+      status: 'success',
       message: 'user created successfully',
-      user:{
-        Email:response.email
-      }
+      user: {
+        Email: response.email,
+      },
     })
   } catch (error) {
     return res.status(400).json({
@@ -70,46 +75,50 @@ app.post('/register', async (req, res) => {
   }
 })
 
-app.post('/login', async(req, res) => {
-  // Get data from server using req.body
-  console.log(req.body)
-  const { email, password: plainTextPassword } = req.body
-
-  // Do some basic validation
-  if (!email || !plainTextPassword) {
-    return res.status(404).json({
-      status: 'Failed',
-      message: 'Data not correct',
-    })
-  }
-  
-  // Check Empty user
-  const user = await User.findOne({email});
-  if(!user) return res.status(400).json({
-    message:"user Does not Exist"
-  })
-
-  // hash it before saving to database
-  const hashPassword = await bcrypt.hash(plainTextPassword, user.password)
-  console.log(hashPassword);
-
+// Login Logic
+app.post('/login', async (req, res) => {
   try {
-    let response = await User.create({
-      email: email,
-      password: hashPassword,
-    })
-    console.log(response);
-    return res.status(201).json({
-      status: "success",
-      message: 'user created successfully',
-      user:{
-        Email:response.email
-      }
+    const { email, password: plainTextPassword } = req.body
+
+    // Do some basic validation
+    if (!email || !plainTextPassword) {
+      return res.status(404).json({
+        status: 'Failed',
+        message: 'Data not correct',
+      })
+    }
+
+    // Check Empty user
+    const user = await User.findOne({ email })
+    if (!user)
+      return res.status(404).json({
+        message: 'user Does not Exist',
+      })
+
+    // hash it before saving to database
+    const hashPassword = await bcrypt.compare(plainTextPassword, user.password)
+    if (!hashPassword) {
+      return res.status(400).json({
+        status: 'Fail',
+        message: 'Password Incorrect',
+      })
+    }
+
+    // Generate token by sending payload with secret key
+    const token = jwt.sign( {
+      sub: user._id,
+      email: user.email,
+    },'secret_key')
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Login Successful',
+      accessToken: token,
     })
   } catch (error) {
     return res.status(400).json({
       status: 'fail',
-      message: error.message,
+      message: 'Login Failed',
     })
   }
 })
