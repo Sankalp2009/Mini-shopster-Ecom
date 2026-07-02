@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
 
   password: {
-    type: mongoose.Schema.Types.Mixed,
+    type: String,
     required: [true, 'please Enter password'],
   },
 })
@@ -36,7 +36,7 @@ app.post('/register', async (req, res) => {
 
   // Do some basic validation
   if (!email || !plainTextPassword) {
-    return res.status(404).json({
+    return res.status(400).json({
       status: 'Failed',
       message: 'Data not correct',
     })
@@ -45,7 +45,7 @@ app.post('/register', async (req, res) => {
   // duplicate user check
   const existingUser = await User.findOne({ email: email })
   if (existingUser)
-    return res.status(400).json({
+    return res.status(409).json({
       status: 'fail',
       message: 'user Already Exist',
     })
@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
     // Check Empty user
     const user = await User.findOne({ email })
     if (!user)
-      return res.status(400).json({
+      return res.status(404).json({
         message: 'user Does not Exist',
       })
 
@@ -105,12 +105,10 @@ app.post('/login', async (req, res) => {
     }
 
     // Generate token by sending payload with secret key
-    const token = jwt.sign(
-      {
-        email: user.email,
-      },
-      'secret_key'
-    )
+    const token = jwt.sign( {
+      sub: user._id,
+      email: user.email,
+    },'secret_key')
 
     return res.status(200).json({
       status: 'success',
