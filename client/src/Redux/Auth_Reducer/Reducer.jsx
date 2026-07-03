@@ -2,6 +2,7 @@ const InitialState = {
   isLoading: false,
   isError: false,
   Error: null,
+  isAuth: false,
   accessToken: null,
 }
 
@@ -14,6 +15,7 @@ const reducer = (currentState = InitialState, action) => {
         isLoading: true,
         isError: false,
         Error: null,
+        isAuth: false,
         accessToken: null,
       }
     case 'Login_Success':
@@ -22,7 +24,8 @@ const reducer = (currentState = InitialState, action) => {
         isLoading: false,
         isError: false,
         Error: null,
-        accessToken: payload.token,
+        isAuth: true,
+        accessToken: payload.Token,
       }
 
     case 'Login_Failure':
@@ -30,6 +33,7 @@ const reducer = (currentState = InitialState, action) => {
         ...currentState,
         isLoading: false,
         isError: true,
+        isAuth: false,
         Error: payload.error,
         accessToken: null,
       }
@@ -40,6 +44,7 @@ const reducer = (currentState = InitialState, action) => {
         isLoading: false,
         isError: false,
         Error: null,
+        isAuth: false,
         accessToken: null,
       }
     default:
