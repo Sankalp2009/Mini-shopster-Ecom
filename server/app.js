@@ -124,4 +124,4 @@ app.post('/api/v1/auth/login', async (req, res) => {
   }
 })
 
-export default app
+export default app  
