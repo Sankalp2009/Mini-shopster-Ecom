@@ -2,8 +2,14 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
+import cors from 'cors'
+
 // Express instances creation
-const app = express()
+const app = express();
+
+// Adds headers: Access-Control-Allow-Origin: *
+app.use(cors())
+
 app.use(express.json())
 
 // Schema + Model
