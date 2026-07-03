@@ -1,6 +1,6 @@
 import { legacy_createStore, combineReducers, compose } from 'redux'
 import { reducer as Cart_Reducer } from './Cart_Reducer/reducer'
-import { reducer as Auth_Reducer } from './Auth_Reducer/Reducer'
+import { reducer as Auth_Reducer } from './Auth_Reducer/reducer'
 
 // Reducer Handler
 const rootReducer = combineReducers({
