@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Action_Type } from '../Redux/Auth_Reducer/Action'
-
+import { useNavigate } from 'react-router'
 const InitialState = {
   email: '',
   password: '',
@@ -10,7 +10,7 @@ const InitialState = {
 function Login() {
   const [isInput, setIsInput] = useState(InitialState)
   const dispatch = useDispatch()
-
+  const Nav = useNavigate();
   const HandleChange = (e) => {
     const { name, value } = e.target
     setIsInput((prevState) => ({
@@ -33,17 +33,33 @@ function Login() {
         },
         body: JSON.stringify({
           email: isInput.email,
-          password: isInput.password
+          password: isInput.password,
         }),
       })
-
-      let data = await Response.json();
-      console.log(data);
-
+      let data = await Response.json()
+      const token = data?.accessToken
+      if(token) {
+        dispatch({
+          type: Action_Type.Login_Success,
+          payload: {
+            Token : token 
+          },
+        })
+        Nav("/dashboard");
+      }else{
+        dispatch({
+          type: Action_Type.Login_Failure,
+          payload: {
+            error: "Token Not identified"
+          },
+        })
+      }
     } catch (error) {
       dispatch({
         type: Action_Type.Login_Failure,
-        payload: error.message,
+        payload: {
+          error: error.message
+        },
       })
     }
   }
