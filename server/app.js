@@ -8,7 +8,9 @@ import cors from 'cors'
 const app = express();
 
 // Adds headers: Access-Control-Allow-Origin: *
-app.use(cors())
+app.use(cors({
+  origin: "*"
+}))
 
 app.use(express.json())
 
