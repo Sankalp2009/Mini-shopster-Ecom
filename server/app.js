@@ -2,6 +2,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
+
 // Express instances creation
 const app = express()
 app.use(express.json())
@@ -29,7 +30,7 @@ app.get('/', (req, res) => {
 })
 
 // Register logic
-app.post('/register', async (req, res) => {
+app.post('/api/v1/auth/register', async (req, res) => {
   // Get data from server using req.body
   console.log(req.body)
   const { email, password: plainTextPassword } = req.body
@@ -76,7 +77,7 @@ app.post('/register', async (req, res) => {
 })
 
 // Login Logic
-app.post('/login', async (req, res) => {
+app.post('/api/v1/auth/login', async (req, res) => {
   try {
     const { email, password: plainTextPassword } = req.body
 
