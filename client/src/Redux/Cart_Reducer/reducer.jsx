@@ -28,6 +28,12 @@ const reducer = (currentState = InitialState, action) => {
           (item) => item.id !== payload
         ),
       }
+
+      case 'Clear_Cart':
+      return {
+        ...currentState,
+        cart_data: [],
+      }
     default:
       return currentState
   }
