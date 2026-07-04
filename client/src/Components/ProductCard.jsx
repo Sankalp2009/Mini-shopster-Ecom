@@ -1,5 +1,10 @@
+import { Action_Type } from '../Redux/Cart_Reducer/Action'
+import { useDispatch } from 'react-redux'
+
 function ProductCard({ product }) {
+  
   const { thumbnail, title, price, category } = product
+  const dispatch = useDispatch()
 
   return (
     <div className="product-card">
@@ -23,6 +28,12 @@ function ProductCard({ product }) {
 
       <button
         className="add-cart-btn"
+        onClick={() => {
+          dispatch({
+            type: Action_Type.Add_cart,
+            payload: product,
+          })
+        }}
       >
         Add to cart
       </button>
