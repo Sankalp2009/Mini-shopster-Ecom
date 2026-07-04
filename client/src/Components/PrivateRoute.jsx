@@ -3,7 +3,7 @@ import { Navigate } from 'react-router'
 function PrivateRoute({ children }) {
   const authState = useSelector((state) => state.Auth)
 
-  if (authState?.isAuth || authState?.accessToken) {
+  if (!authState?.isAuth || !authState?.accessToken) {
     return <Navigate to="/login" replace={true} />
   }
 
