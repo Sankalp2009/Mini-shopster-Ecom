@@ -5,10 +5,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Action_Type } from '../Redux/Auth_Reducer/Action'
 
 function Header() {
-  const cart = useSelector((state) => state.Cart)
-  const length = cart?.cart_data?.length || 0
-  const dispatch = useDispatch()
-  const { isAuth } = useSelector((state) => state?.Auth) 
+  const cart = useSelector((state) => state.Cart);
+  const length = cart?.cart_data?.length || 0;
+  const dispatch = useDispatch();
+  const { isAuth } = useSelector((state) => state?.Auth);
 
   return (
     <header className="Header-Top">

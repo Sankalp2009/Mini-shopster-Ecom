@@ -1,10 +1,12 @@
 import { useSelector } from 'react-redux'
-import CartCard from '../Components/CartCard';
+import Cart from '../Components/Cart'
+// cart data transfer component
 function CartPage() {
-  const cart = useSelector(state => state.Cart);
+  const cart = useSelector((state) => state.Cart?.cart_data)
+
   return (
     <div>
-      <CartCard product={cart?.cart_data}  />
+      <Cart data={cart} />
     </div>
   )
 }
