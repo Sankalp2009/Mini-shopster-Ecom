@@ -237,3 +237,32 @@ input
     transform 0.25s ease,
     opacity 0.25s ease;
 }
+
+/* Cart */
+.cart-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cart_length{
+  position: absolute;
+
+  top: -7px;
+  right: 5px;
+
+  background-color: green;
+  color: white;
+
+  border-radius: 50%;
+
+  min-width: 15px;
+  height: 15px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 11px;
+  font-weight: bold;
+}

@@ -6,17 +6,19 @@ const reducer = (currentState = InitialState, action) => {
   const { type, payload } = action
   switch (type) {
     case 'Add_Cart': {
+      
       // check duplication
       const duplicates = currentState.cart_data.some(
         (item) => item.id === payload.id
       )
       if (duplicates) {
-        return currentState.cart_data
+        return currentState
       }
-
+      
+      // store Array of object
       return {
         ...currentState,
-        cart_data: [currentState.cart_data, payload],
+        cart_data: [...currentState.cart_data, payload],
       }
     }
     case 'Remove_Cart':
