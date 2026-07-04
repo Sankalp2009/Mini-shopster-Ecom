@@ -25,7 +25,7 @@ const reducer = (currentState = InitialState, action) => {
       return {
         ...currentState,
         cart_data: currentState.cart_data.filter(
-          (item) => item.id !== payload.id
+          (item) => item.id !== payload
         ),
       }
     default:
